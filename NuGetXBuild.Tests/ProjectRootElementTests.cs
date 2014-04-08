@@ -34,7 +34,7 @@ namespace NuGetXBuild.Tests
 
 		string CreateProjectXmlFile (string xml, string fileName)
 		{
-			string directory = Path.GetDirectoryName (typeof(ProjectTests).Assembly.Location);
+			string directory = Path.GetDirectoryName (typeof(ProjectRootElementTests).Assembly.Location);
 			string fullPath = Path.Combine (directory, fileName);
 
 			File.WriteAllText (fullPath, xml);

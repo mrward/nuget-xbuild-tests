@@ -36,8 +36,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProjectTests.cs" />
     <Compile Include="ProjectRootElementTests.cs" />
+    <Compile Include="GetReferenceProjectItemsTests.cs" />
+    <Compile Include="GetTargetFrameworkMonikerTests.cs" />
+    <Compile Include="ReevaluateIfNecessaryTests.cs" />
+    <Compile Include="RemoveReferenceFromProjectTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

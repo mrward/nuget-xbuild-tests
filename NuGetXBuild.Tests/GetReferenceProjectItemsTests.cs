@@ -9,37 +9,14 @@ using NUnit.Framework;
 namespace NuGetXBuild.Tests
 {
 	[TestFixture]
-	public class ProjectTests
+	public class GetReferenceProjectItemsTests
 	{
-		[Test]
-		public void GetTargetFrameworkMonitorPropertyValueFromImportedTargetsFile ()
-		{
-			string xml =
-@"<Project ToolsVersion='4.0' xmlns='http://schemas.microsoft.com/developer/msbuild/2003'>
-	<Import Project='$(MSBuildBinPath)\Microsoft.CSharp.targets' />
-</Project>";
-			Project project = new Project (XmlReader.Create (new StringReader (xml)));
-
-			string value = project.GetPropertyValue ("TargetFrameworkMoniker");
-
-			Assert.AreEqual (".NETFramework,Version=v4.0", value);
-		}
-
-		[Test]
-		public void ReevaluateIfNecessaryWhenNoChangesMade ()
-		{
-			string xml = @"<Project xmlns='http://schemas.microsoft.com/developer/msbuild/2003'/>";
-			Project project = new Project (XmlReader.Create (new StringReader (xml)));
-
-			Assert.DoesNotThrow (() => project.ReevaluateIfNecessary ());
-		}
-
 		[Test]
 		[Ignore("This works on MAC")]
 		public void GetReferenceProjectItemUsingGetItems ()
 		{
 			string xml =
-@"<Project ToolsVersion='4.0' xmlns='http://schemas.microsoft.com/developer/msbuild/2003'>
+				@"<Project ToolsVersion='4.0' xmlns='http://schemas.microsoft.com/developer/msbuild/2003'>
 	<ItemGroup>
 		<Reference Include='Microsoft.Build' />
 	</ItemGroup>
@@ -51,6 +28,7 @@ namespace NuGetXBuild.Tests
 			Assert.AreEqual ("Microsoft.Build", referenceItem.EvaluatedInclude);
 		}
 
+		// Works on Windows but not son Mac
 		[Test]
 		public void GetReferenceProjectItemUsingGetItemsWhenProjectLoadedFromDisk ()
 		{
@@ -73,7 +51,7 @@ namespace NuGetXBuild.Tests
 
 		string CreateProjectXmlFile (string xml, string fileName)
 		{
-			string directory = Path.GetDirectoryName (typeof(ProjectTests).Assembly.Location);
+			string directory = Path.GetDirectoryName (typeof(GetReferenceProjectItemsTests).Assembly.Location);
 			string fullPath = Path.Combine (directory, fileName);
 
 			File.WriteAllText (fullPath, xml);
@@ -158,24 +136,6 @@ namespace NuGetXBuild.Tests
 			ProjectItem referenceItem = project.GetItems ("Reference").Single (i => i.EvaluatedInclude == "Newtonsoft.Json");
 
 			Assert.AreEqual ("Newtonsoft.Json", referenceItem.EvaluatedInclude);
-		}
-
-		[Test]
-		public void RemoveReferenceFromProject ()
-		{
-			string xml =
-@"<Project ToolsVersion='4.0' xmlns='http://schemas.microsoft.com/developer/msbuild/2003'>
-	<ItemGroup>
-		<Reference Include='Microsoft.Build' />
-	</ItemGroup>
-</Project>";
-			Project project = new Project (XmlReader.Create (new StringReader (xml)));
-			ProjectItem referenceItem = project.GetItems ("Reference").Single ();
-
-			project.RemoveItem (referenceItem);
-
-			int count = project.GetItems ("Reference").Count;
-			Assert.AreEqual (0, count);
 		}
 	}
 }
