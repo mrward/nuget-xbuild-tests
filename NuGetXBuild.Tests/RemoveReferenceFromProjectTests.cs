@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using Microsoft.Build.Evaluation;
 using NUnit.Framework;
 
 namespace NuGetXBuild.Tests
@@ -20,8 +19,8 @@ namespace NuGetXBuild.Tests
 		<Reference Include='Microsoft.Build' />
 	</ItemGroup>
 </Project>";
-			Project project = new Project (XmlReader.Create (new StringReader (xml)));
-			ProjectItem referenceItem = project.GetItems ("Reference").Single ();
+			var project = new Microsoft.Build.Evaluation.Project (XmlReader.Create (new StringReader (xml)));
+			var referenceItem = project.GetItems ("Reference").Single ();
 
 			project.RemoveItem (referenceItem);
 

@@ -41,6 +41,7 @@
     <Compile Include="GetTargetFrameworkMonikerTests.cs" />
     <Compile Include="ReevaluateIfNecessaryTests.cs" />
     <Compile Include="RemoveReferenceFromProjectTests.cs" />
+    <Compile Include="AddReferenceToProjectTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
