@@ -42,6 +42,7 @@
     <Compile Include="ReevaluateIfNecessaryTests.cs" />
     <Compile Include="RemoveReferenceFromProjectTests.cs" />
     <Compile Include="AddReferenceToProjectTests.cs" />
+    <Compile Include="ProjectConstructorTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
