@@ -28,7 +28,7 @@ namespace NuGetXBuild.Tests
 			Assert.AreEqual ("Microsoft.Build", referenceItem.EvaluatedInclude);
 		}
 
-		// Works on Windows but not son Mac
+		// Works on Windows but not on Mac
 		[Test]
 		public void GetReferenceProjectItemUsingGetItemsWhenProjectLoadedFromDisk ()
 		{
