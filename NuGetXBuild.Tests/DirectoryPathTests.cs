@@ -21,6 +21,7 @@ namespace NuGetXBuild.Tests
 			string fileName = CreateProjectXmlFile (xml, "DirectoryPathTest.csproj");
 
 			var globalProperties = new Dictionary<string, string> ();
+			Directory.SetCurrentDirectory (System.Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData));
 			var project = new Microsoft.Build.Evaluation.Project (fileName, globalProperties, null);
 
 			string path = project.DirectoryPath;
