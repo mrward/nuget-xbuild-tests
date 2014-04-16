@@ -44,6 +44,7 @@
     <Compile Include="AddReferenceToProjectTests.cs" />
     <Compile Include="ProjectConstructorTests.cs" />
     <Compile Include="DirectoryPathTests.cs" />
+    <Compile Include="GetTargetPathTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
