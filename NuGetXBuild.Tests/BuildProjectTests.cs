@@ -4,6 +4,9 @@ using System.IO;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using System.Collections.Generic;
+using System.Xml;
+using System.Linq;
+using Microsoft.Build.Framework;
 
 namespace NuGetXBuild.Tests
 {
@@ -124,6 +127,46 @@ using System.Runtime.CompilerServices;
 ";
 
 			File.WriteAllText (Path.Combine (GetProjectDirectory (), "AssemblyInfo.cs"), assemblyInfo);
+		}
+
+		[Test]
+		public void BuildProjectSpecifyingTargetShouldBuildProject ()
+		{
+			RemoveOldBuildOutputIfExists ();
+
+			// Create project
+			string projectFullPath = GetProjectPath ();
+			CreateProject (projectFullPath);
+
+			// Build project.
+			var projectProperties = new Dictionary<string, string> ();
+			using (var projectCollection = new ProjectCollection (ToolsetDefinitionLocations.Registry | ToolsetDefinitionLocations.ConfigurationFile)) {
+				var targetsToBuild = new string[] { "Build" };
+				var rootElement = Microsoft.Build.Construction.ProjectRootElement.Create (
+					XmlReader.Create (projectFullPath));
+				rootElement.FullPath = projectFullPath;
+				var projectInstance = new ProjectInstance (rootElement);
+				BuildRequestData requestData = new BuildRequestData (projectInstance, targetsToBuild);
+				var parameters = new BuildParameters (projectCollection) {
+					Loggers = new ILogger[] { new Microsoft.Build.Logging.ConsoleLogger () },
+					NodeExeLocation = typeof(BuildProjectTests).Assembly.Location,
+					ToolsetDefinitionLocations = projectCollection.ToolsetLocations
+				};
+				BuildResult result = BuildManager.DefaultBuildManager.Build (parameters, requestData);
+
+				foreach (var key in result.ResultsByTarget.Keys) {
+					var targetResult = result.ResultsByTarget[key];
+					Console.WriteLine (key);
+					Console.WriteLine (targetResult.ResultCode);
+					if (targetResult.Exception != null) {
+						Console.WriteLine (targetResult.Exception);
+					}
+				}
+				Assert.AreEqual (result.OverallResult, BuildResultCode.Success);
+			}
+
+			string outputFileName = GetBuildOutputFileName ();
+			Assert.IsTrue (File.Exists (outputFileName));
 		}
 	}
 }
